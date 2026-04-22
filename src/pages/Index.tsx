@@ -1,19 +1,95 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, Cpu, Zap, Shield, Search, Wrench, Star } from "lucide-react";
+import { ArrowRight, Cpu, Zap, Shield, Search, Wrench, Star, X } from "lucide-react";
 import Icon from "@/components/ui/icon";
+
+type Build = {
+  tag: string;
+  name: string;
+  price: string;
+  cpu: string;
+  gpu: string;
+  ram: string;
+  ssd: string;
+  badge: string | null;
+  highlight: boolean;
+  desc: string;
+};
+
+const BUILDS: Build[] = [
+  {
+    tag: "Гейминг",
+    name: "Игровой Хит",
+    price: "85 000 ₽",
+    cpu: "AMD Ryzen 7 7700X",
+    gpu: "RTX 4070 Super",
+    ram: "32 ГБ DDR5",
+    ssd: "1 ТБ NVMe",
+    badge: "Топ продаж",
+    highlight: true,
+    desc: "Идеальный баланс цены и производительности для игр в Full HD и 2K. Потянет любой AAA-тайтл на высоких настройках.",
+  },
+  {
+    tag: "Бюджетный",
+    name: "Старт",
+    price: "35 000 ₽",
+    cpu: "AMD Ryzen 5 7600",
+    gpu: "RTX 4060",
+    ram: "16 ГБ DDR5",
+    ssd: "512 ГБ NVMe",
+    badge: null,
+    highlight: false,
+    desc: "Отличный вход в мир ПК-гейминга и работы. Справится с большинством задач без лишних трат.",
+  },
+  {
+    tag: "Работа и учёба",
+    name: "Офисный Про",
+    price: "45 000 ₽",
+    cpu: "Intel Core i5-14400",
+    gpu: "Intel Arc A380",
+    ram: "32 ГБ DDR4",
+    ssd: "1 ТБ NVMe",
+    badge: null,
+    highlight: false,
+    desc: "Быстрый и тихий ПК для офисных задач, браузера, документов и лёгкой графики. Работает без перебоев.",
+  },
+  {
+    tag: "Видеомонтаж",
+    name: "Медиа Студия",
+    price: "130 000 ₽",
+    cpu: "AMD Ryzen 9 7950X",
+    gpu: "RTX 4080",
+    ram: "64 ГБ DDR5",
+    ssd: "2 ТБ NVMe",
+    badge: "Выбор профи",
+    highlight: false,
+    desc: "Мощная станция для монтажа 4K/8K, работы в After Effects, DaVinci Resolve и 3D-рендеринга.",
+  },
+  {
+    tag: "Гейминг 4K",
+    name: "Ультра Монстр",
+    price: "200 000 ₽",
+    cpu: "Intel Core i9-14900K",
+    gpu: "RTX 4090",
+    ram: "64 ГБ DDR5",
+    ssd: "4 ТБ NVMe",
+    badge: "Максимум",
+    highlight: false,
+    desc: "Абсолютный флагман — 4K на ультрах в любой игре, стриминг и монтаж одновременно. Без компромиссов.",
+  },
+];
 
 const Index = () => {
   const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({});
+  const [selectedBuild, setSelectedBuild] = useState<Build | null>(null);
+  const [form, setForm] = useState({ name: "", phone: "" });
+  const [sent, setSent] = useState(false);
 
   useEffect(() => {
     const observers: Record<string, IntersectionObserver> = {};
-
     const sectionIds = ["hero", "features", "how", "pricing", "cta"];
-
     sectionIds.forEach((id) => {
       const element = document.getElementById(id);
       if (!element) return;
-
       observers[id] = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
@@ -23,14 +99,23 @@ const Index = () => {
         },
         { threshold: 0.15 }
       );
-
       observers[id].observe(element);
     });
-
     return () => {
       Object.values(observers).forEach((observer) => observer.disconnect());
     };
   }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSent(true);
+  };
+
+  const closeModal = () => {
+    setSelectedBuild(null);
+    setSent(false);
+    setForm({ name: "", phone: "" });
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -43,18 +128,10 @@ const Index = () => {
             </div>
           </div>
           <nav className="hidden md:flex gap-10 text-sm font-medium">
-            <a href="#features" className="text-muted-foreground hover:text-white transition-colors">
-              Возможности
-            </a>
-            <a href="#how" className="text-muted-foreground hover:text-white transition-colors">
-              Как это работает
-            </a>
-            <a href="#builds" className="text-muted-foreground hover:text-white transition-colors">
-              Топ сборок
-            </a>
-            <a href="#pricing" className="text-muted-foreground hover:text-white transition-colors">
-              Тарифы
-            </a>
+            <a href="#features" className="text-muted-foreground hover:text-white transition-colors">Возможности</a>
+            <a href="#how" className="text-muted-foreground hover:text-white transition-colors">Как это работает</a>
+            <a href="#builds" className="text-muted-foreground hover:text-white transition-colors">Топ сборок</a>
+            <a href="#pricing" className="text-muted-foreground hover:text-white transition-colors">Тарифы</a>
           </nav>
           <div className="flex gap-3">
             <button className="px-5 py-2.5 text-sm font-medium border border-accent/40 rounded-full hover:border-accent/70 hover:bg-accent/10 transition-all">
@@ -73,27 +150,19 @@ const Index = () => {
           <img src="/images/black-hole-gif.gif" alt="Background animation" className="w-auto h-3/4 object-contain" />
         </div>
         <div className="absolute inset-0 bg-black/70" />
-
         <div className="relative z-10 max-w-7xl mx-auto w-full">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div
-              className={`transition-all duration-1000 ${visibleSections["hero"] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-            >
+            <div className={`transition-all duration-1000 ${visibleSections["hero"] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
               <div className="mb-8 inline-block">
-                <span className="text-xs font-medium tracking-widest text-accent/80 uppercase">
-                  AI-агент для сборки компьютеров
-                </span>
+                <span className="text-xs font-medium tracking-widest text-accent/80 uppercase">AI-агент для сборки компьютеров</span>
               </div>
               <h1 className="text-6xl lg:text-7xl font-display font-black leading-tight mb-8 tracking-tighter">
-                <span className="bg-gradient-to-br from-white via-white to-accent/40 bg-clip-text text-transparent">
-                  Собери ПК.
-                </span>
+                <span className="bg-gradient-to-br from-white via-white to-accent/40 bg-clip-text text-transparent">Собери ПК.</span>
                 <br />
                 <span className="text-accent">Без ошибок.</span>
               </h1>
               <p className="text-xl text-white/80 leading-relaxed mb-10 max-w-xl font-light">
-                AI-агент подберёт совместимые комплектующие под ваш бюджет и задачи — гейминг, работа, монтаж видео.
-                Пошагово, без лишних слов.
+                AI-агент подберёт совместимые комплектующие под ваш бюджет и задачи — гейминг, работа, монтаж видео. Пошагово, без лишних слов.
               </p>
               <div className="flex gap-4 mb-12 flex-col sm:flex-row">
                 <button className="group px-8 py-4 bg-gradient-to-r from-accent to-accent/90 text-black rounded-full hover:shadow-2xl hover:shadow-accent/50 transition-all font-semibold text-lg flex items-center gap-3 justify-center">
@@ -119,16 +188,9 @@ const Index = () => {
                 </div>
               </div>
             </div>
-
-            <div
-              className={`relative h-96 lg:h-[550px] transition-all duration-1000 flex items-center justify-center ${visibleSections["hero"] ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
-            >
+            <div className={`relative h-96 lg:h-[550px] transition-all duration-1000 flex items-center justify-center ${visibleSections["hero"] ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}>
               <div className="absolute inset-0 bg-gradient-to-br from-accent/30 via-transparent to-transparent rounded-3xl blur-3xl animate-pulse" />
-              <img
-                src="/omnius-logo.png"
-                alt="BuildMind AI"
-                className="w-full max-w-sm lg:max-w-md drop-shadow-2xl animate-float relative z-10"
-              />
+              <img src="/omnius-logo.png" alt="BuildMind AI" className="w-full max-w-sm lg:max-w-md drop-shadow-2xl animate-float relative z-10" />
             </div>
           </div>
         </div>
@@ -137,57 +199,26 @@ const Index = () => {
       {/* Features Section */}
       <section id="features" className="py-32 px-6 bg-accent/5">
         <div className="max-w-7xl mx-auto">
-          <div
-            className={`text-center mb-20 transition-all duration-1000 ${visibleSections["features"] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-          >
+          <div className={`text-center mb-20 transition-all duration-1000 ${visibleSections["features"] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
             <span className="text-xs font-medium tracking-widest text-accent/60 uppercase">Возможности</span>
             <h2 className="text-5xl lg:text-6xl font-display font-black tracking-tighter mt-4 mb-6">
-              <span className="bg-gradient-to-r from-white via-white to-accent/40 bg-clip-text text-transparent">
-                Умный помощник внутри
-              </span>
+              <span className="bg-gradient-to-r from-white via-white to-accent/40 bg-clip-text text-transparent">Умный помощник внутри</span>
             </h2>
           </div>
-
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              {
-                icon: "Cpu",
-                title: "Подбор под задачу",
-                desc: "Скажите что хотите делать — гейминг, работа, стриминг — и агент сам подберёт нужные компоненты",
-              },
-              {
-                icon: "Shield",
-                title: "Проверка совместимости",
-                desc: "Автоматически проверяет, что все детали совместимы между собой. Никаких ошибок при сборке",
-              },
-              {
-                icon: "Zap",
-                title: "Оптимизация бюджета",
-                desc: "Агент предлагает лучшее соотношение цена/производительность в рамках вашего бюджета",
-              },
-              {
-                icon: "Search",
-                title: "Сравнение цен",
-                desc: "Сравнивает актуальные цены у ключевых поставщиков и находит выгодные предложения",
-              },
-              {
-                icon: "Wrench",
-                title: "Пошаговая инструкция",
-                desc: "После подбора деталей агент даёт понятную инструкцию по сборке с фото и видео",
-              },
-              {
-                icon: "Star",
-                title: "Готовые сборки",
-                desc: "Библиотека проверенных конфигураций для популярных задач — выбери и настрой под себя",
-              },
+              { icon: "Cpu", title: "Подбор под задачу", desc: "Скажите что хотите делать — гейминг, работа, стриминг — и агент сам подберёт нужные компоненты" },
+              { icon: "Shield", title: "Проверка совместимости", desc: "Автоматически проверяет, что все детали совместимы между собой. Никаких ошибок при сборке" },
+              { icon: "Zap", title: "Оптимизация бюджета", desc: "Агент предлагает лучшее соотношение цена/производительность в рамках вашего бюджета" },
+              { icon: "Search", title: "Сравнение цен", desc: "Сравнивает актуальные цены у ключевых поставщиков и находит выгодные предложения" },
+              { icon: "Wrench", title: "Пошаговая инструкция", desc: "После подбора деталей агент даёт понятную инструкцию по сборке с фото и видео" },
+              { icon: "Star", title: "Готовые сборки", desc: "Библиотека проверенных конфигураций для популярных задач — выбери и настрой под себя" },
             ].map((item, i) => {
               const isVisible = visibleSections["features"];
               return (
                 <div
                   key={i}
-                  className={`group p-8 border border-accent/10 hover:border-accent/40 rounded-2xl bg-card/50 hover:bg-card/80 transition-all duration-700 ${
-                    isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                  }`}
+                  className={`group p-8 border border-accent/10 hover:border-accent/40 rounded-2xl bg-card/50 hover:bg-card/80 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
                   style={{ transitionDelay: `${i * 100}ms` }}
                 >
                   <div className="w-12 h-12 bg-accent/10 group-hover:bg-accent/20 rounded-xl flex items-center justify-center mb-6 transition-colors">
@@ -205,17 +236,12 @@ const Index = () => {
       {/* How It Works */}
       <section id="how" className="py-32 px-6">
         <div className="max-w-7xl mx-auto">
-          <div
-            className={`text-center mb-20 transition-all duration-1000 ${visibleSections["how"] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-          >
+          <div className={`text-center mb-20 transition-all duration-1000 ${visibleSections["how"] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
             <span className="text-xs font-medium tracking-widest text-accent/60 uppercase">Процесс</span>
             <h2 className="text-5xl lg:text-6xl font-display font-black tracking-tighter mt-4">
-              <span className="bg-gradient-to-r from-white via-white to-accent/40 bg-clip-text text-transparent">
-                Четыре шага до сборки
-              </span>
+              <span className="bg-gradient-to-r from-white via-white to-accent/40 bg-clip-text text-transparent">Четыре шага до сборки</span>
             </h2>
           </div>
-
           <div className="grid md:grid-cols-4 gap-6">
             {[
               { num: "01", title: "Расскажите о себе", desc: "Укажите для чего нужен ПК и какой у вас бюджет" },
@@ -227,23 +253,17 @@ const Index = () => {
               return (
                 <div
                   key={i}
-                  className={`relative transition-all duration-700 ${
-                    isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                  }`}
+                  className={`relative transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
                   style={{ transitionDelay: `${i * 150}ms` }}
                 >
                   <div className="group bg-accent/10 hover:bg-accent/20 border border-accent/20 hover:border-accent/40 rounded-2xl p-8 h-full flex flex-col justify-between transition-all backdrop-blur-sm cursor-pointer">
                     <div>
-                      <div className="text-5xl font-display font-black text-accent mb-4 group-hover:scale-110 transition-transform">
-                        {step.num}
-                      </div>
+                      <div className="text-5xl font-display font-black text-accent mb-4 group-hover:scale-110 transition-transform">{step.num}</div>
                       <h3 className="font-display font-bold text-xl mb-2">{step.title}</h3>
                       <p className="text-muted-foreground leading-relaxed">{step.desc}</p>
                     </div>
                   </div>
-                  {i < 3 && (
-                    <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-0.5 bg-gradient-to-r from-accent/40 to-transparent" />
-                  )}
+                  {i < 3 && <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-0.5 bg-gradient-to-r from-accent/40 to-transparent" />}
                 </div>
               );
             })}
@@ -254,76 +274,15 @@ const Index = () => {
       {/* Top Builds */}
       <section id="builds" className="py-32 px-6">
         <div className="max-w-7xl mx-auto">
-          <div
-            className={`text-center mb-20 transition-all duration-1000 ${visibleSections["how"] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-          >
+          <div className={`text-center mb-20 transition-all duration-1000 ${visibleSections["how"] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
             <span className="text-xs font-medium tracking-widest text-accent/60 uppercase">Готовые конфигурации</span>
             <h2 className="text-5xl lg:text-6xl font-display font-black tracking-tighter mt-4 mb-4">
-              <span className="bg-gradient-to-r from-white via-white to-accent/40 bg-clip-text text-transparent">
-                Топ сборок 2026
-              </span>
+              <span className="bg-gradient-to-r from-white via-white to-accent/40 bg-clip-text text-transparent">Топ сборок 2026</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto">Проверенные конфигурации под разные задачи и бюджеты</p>
           </div>
-
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                tag: "Гейминг",
-                name: "Игровой Хит",
-                price: "85 000 ₽",
-                cpu: "AMD Ryzen 7 7700X",
-                gpu: "RTX 4070 Super",
-                ram: "32 ГБ DDR5",
-                ssd: "1 ТБ NVMe",
-                badge: "Топ продаж",
-                highlight: true,
-              },
-              {
-                tag: "Бюджетный",
-                name: "Старт",
-                price: "35 000 ₽",
-                cpu: "AMD Ryzen 5 7600",
-                gpu: "RTX 4060",
-                ram: "16 ГБ DDR5",
-                ssd: "512 ГБ NVMe",
-                badge: null,
-                highlight: false,
-              },
-              {
-                tag: "Работа и учёба",
-                name: "Офисный Про",
-                price: "45 000 ₽",
-                cpu: "Intel Core i5-14400",
-                gpu: "Intel Arc A380",
-                ram: "32 ГБ DDR4",
-                ssd: "1 ТБ NVMe",
-                badge: null,
-                highlight: false,
-              },
-              {
-                tag: "Видеомонтаж",
-                name: "Медиа Студия",
-                price: "130 000 ₽",
-                cpu: "AMD Ryzen 9 7950X",
-                gpu: "RTX 4080",
-                ram: "64 ГБ DDR5",
-                ssd: "2 ТБ NVMe",
-                badge: "Выбор профи",
-                highlight: false,
-              },
-              {
-                tag: "Гейминг 4K",
-                name: "Ультра Монстр",
-                price: "200 000 ₽",
-                cpu: "Intel Core i9-14900K",
-                gpu: "RTX 4090",
-                ram: "64 ГБ DDR5",
-                ssd: "4 ТБ NVMe",
-                badge: "Максимум",
-                highlight: false,
-              },
-            ].map((build, i) => {
+            {BUILDS.map((build, i) => {
               const isVisible = visibleSections["how"];
               return (
                 <div
@@ -361,6 +320,7 @@ const Index = () => {
                     ))}
                   </ul>
                   <button
+                    onClick={() => setSelectedBuild(build)}
                     className={`w-full py-3 rounded-xl text-sm font-semibold transition-all ${
                       build.highlight
                         ? "bg-gradient-to-r from-accent to-accent/80 text-black hover:shadow-lg hover:shadow-accent/30"
@@ -379,39 +339,24 @@ const Index = () => {
       {/* Pricing */}
       <section id="pricing" className="py-32 px-6 bg-accent/5">
         <div className="max-w-5xl mx-auto">
-          <div
-            className={`text-center mb-20 transition-all duration-1000 ${visibleSections["pricing"] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-          >
+          <div className={`text-center mb-20 transition-all duration-1000 ${visibleSections["pricing"] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
             <span className="text-xs font-medium tracking-widest text-accent/60 uppercase">Тарифы</span>
             <h2 className="text-5xl lg:text-6xl font-display font-black tracking-tighter mt-4">
-              <span className="bg-gradient-to-r from-white via-white to-accent/40 bg-clip-text text-transparent">
-                Простые цены
-              </span>
+              <span className="bg-gradient-to-r from-white via-white to-accent/40 bg-clip-text text-transparent">Простые цены</span>
             </h2>
           </div>
-
           <div className="grid md:grid-cols-2 gap-8">
             {[
               {
                 name: "Базовый",
                 price: "Бесплатно",
-                features: [
-                  "3 сборки в месяц",
-                  "Проверка совместимости",
-                  "Готовые шаблоны конфигураций",
-                  "Пошаговая инструкция",
-                ],
+                features: ["3 сборки в месяц", "Проверка совместимости", "Готовые шаблоны конфигураций", "Пошаговая инструкция"],
                 highlight: false,
               },
               {
                 name: "Про",
                 price: "990 ₽/мес",
-                features: [
-                  "Неограниченные сборки",
-                  "Сравнение цен у поставщиков",
-                  "Персональные рекомендации",
-                  "Приоритетная поддержка 24/7",
-                ],
+                features: ["Неограниченные сборки", "Сравнение цен у поставщиков", "Персональные рекомендации", "Приоритетная поддержка 24/7"],
                 highlight: true,
               },
             ].map((plan, i) => {
@@ -419,19 +364,13 @@ const Index = () => {
               return (
                 <div
                   key={i}
-                  className={`group relative transition-all duration-700 ${
-                    isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
-                  } ${plan.highlight ? "md:scale-105" : ""}`}
+                  className={`group relative transition-all duration-700 ${isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"} ${plan.highlight ? "md:scale-105" : ""}`}
                   style={{ transitionDelay: `${i * 200}ms` }}
                 >
                   {plan.highlight && (
                     <div className="absolute -inset-1 bg-gradient-to-r from-accent via-accent to-accent/60 rounded-3xl opacity-20 blur-xl group-hover:opacity-30 transition" />
                   )}
-                  <div
-                    className={`relative p-10 border rounded-2xl h-full flex flex-col justify-between backdrop-blur-sm transition-all ${
-                      plan.highlight ? "border-accent/40 bg-accent/10" : "border-accent/10 bg-card/50 hover:bg-card/80"
-                    }`}
-                  >
+                  <div className={`relative p-10 border rounded-2xl h-full flex flex-col justify-between backdrop-blur-sm transition-all ${plan.highlight ? "border-accent/40 bg-accent/10" : "border-accent/10 bg-card/50 hover:bg-card/80"}`}>
                     <div>
                       <h3 className="font-display font-bold text-2xl mb-2">{plan.name}</h3>
                       <p className="text-4xl font-black text-accent mb-8">{plan.price}</p>
@@ -444,13 +383,7 @@ const Index = () => {
                         ))}
                       </ul>
                     </div>
-                    <button
-                      className={`w-full px-6 py-4 rounded-xl font-semibold transition-all ${
-                        plan.highlight
-                          ? "bg-gradient-to-r from-accent to-accent/80 text-black hover:shadow-xl hover:shadow-accent/40"
-                          : "border border-accent/20 hover:border-accent/40 hover:bg-accent/5"
-                      }`}
-                    >
+                    <button className={`w-full px-6 py-4 rounded-xl font-semibold transition-all ${plan.highlight ? "bg-gradient-to-r from-accent to-accent/80 text-black hover:shadow-xl hover:shadow-accent/40" : "border border-accent/20 hover:border-accent/40 hover:bg-accent/5"}`}>
                       {plan.highlight ? "Подключить Про" : "Начать бесплатно"}
                     </button>
                   </div>
@@ -463,13 +396,9 @@ const Index = () => {
 
       {/* CTA */}
       <section id="cta" className="py-32 px-6">
-        <div
-          className={`max-w-4xl mx-auto text-center transition-all duration-1000 ${visibleSections["cta"] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-        >
+        <div className={`max-w-4xl mx-auto text-center transition-all duration-1000 ${visibleSections["cta"] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
           <h2 className="text-5xl lg:text-6xl font-display font-black tracking-tighter mb-6">
-            <span className="bg-gradient-to-r from-white via-white to-accent/40 bg-clip-text text-transparent">
-              Готов собрать свой ПК?
-            </span>
+            <span className="bg-gradient-to-r from-white via-white to-accent/40 bg-clip-text text-transparent">Готов собрать свой ПК?</span>
           </h2>
           <p className="text-xl text-muted-foreground mb-12 font-light max-w-2xl mx-auto">
             Расскажи агенту о своих задачах и бюджете — он подберёт идеальную конфигурацию за минуты.
@@ -486,21 +415,90 @@ const Index = () => {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-muted-foreground">
           <p>© 2026 Сборки ПК от Сани</p>
           <div className="flex gap-8">
-            <a href="#" className="hover:text-white transition-colors">
-              Конфиденциальность
-            </a>
-            <a href="#" className="hover:text-white transition-colors">
-              Условия
-            </a>
-            <a href="#" className="hover:text-white transition-colors">
-              FAQ
-            </a>
-            <a href="#" className="hover:text-white transition-colors">
-              Контакты
-            </a>
+            <a href="#" className="hover:text-white transition-colors">Конфиденциальность</a>
+            <a href="#" className="hover:text-white transition-colors">Условия</a>
+            <a href="#" className="hover:text-white transition-colors">FAQ</a>
+            <a href="#" className="hover:text-white transition-colors">Контакты</a>
           </div>
         </div>
       </footer>
+
+      {/* Modal */}
+      {selectedBuild && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4" onClick={closeModal}>
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+          <div
+            className="relative w-full max-w-md bg-background border border-accent/30 rounded-2xl p-8 shadow-2xl shadow-accent/10"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button onClick={closeModal} className="absolute top-4 right-4 text-muted-foreground hover:text-white transition-colors">
+              <X className="w-5 h-5" />
+            </button>
+
+            {!sent ? (
+              <>
+                <div className="mb-6">
+                  <span className="text-xs font-medium text-accent/70 uppercase tracking-widest">{selectedBuild.tag}</span>
+                  <h3 className="font-display font-black text-3xl mt-1 mb-1">{selectedBuild.name}</h3>
+                  <p className="text-accent text-2xl font-black mb-3">{selectedBuild.price}</p>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{selectedBuild.desc}</p>
+                </div>
+
+                <ul className="space-y-2 mb-6 p-4 bg-accent/5 rounded-xl border border-accent/10">
+                  {[
+                    { label: "CPU", value: selectedBuild.cpu },
+                    { label: "GPU", value: selectedBuild.gpu },
+                    { label: "RAM", value: selectedBuild.ram },
+                    { label: "SSD", value: selectedBuild.ssd },
+                  ].map((spec) => (
+                    <li key={spec.label} className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">{spec.label}</span>
+                      <span className="text-foreground/90 font-medium">{spec.value}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <form onSubmit={handleSubmit} className="space-y-3">
+                  <p className="text-sm font-medium text-white/80 mb-4">Оставьте заявку — Саня свяжется с вами:</p>
+                  <input
+                    required
+                    type="text"
+                    placeholder="Ваше имя"
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-accent/20 text-white placeholder:text-muted-foreground focus:outline-none focus:border-accent/50 transition-colors text-sm"
+                  />
+                  <input
+                    required
+                    type="tel"
+                    placeholder="Телефон или Telegram"
+                    value={form.phone}
+                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-accent/20 text-white placeholder:text-muted-foreground focus:outline-none focus:border-accent/50 transition-colors text-sm"
+                  />
+                  <button
+                    type="submit"
+                    className="w-full py-3 bg-gradient-to-r from-accent to-accent/80 text-black rounded-xl font-semibold hover:shadow-lg hover:shadow-accent/30 transition-all"
+                  >
+                    Отправить заявку
+                  </button>
+                </form>
+              </>
+            ) : (
+              <div className="text-center py-8">
+                <div className="w-16 h-16 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Icon name="Check" size={32} className="text-accent" />
+                </div>
+                <h3 className="font-display font-black text-2xl mb-2">Заявка принята!</h3>
+                <p className="text-muted-foreground text-sm">Саня свяжется с вами в ближайшее время для уточнения деталей сборки.</p>
+                <button onClick={closeModal} className="mt-6 px-6 py-2.5 border border-accent/30 rounded-full text-sm hover:border-accent/60 transition-colors">
+                  Закрыть
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
