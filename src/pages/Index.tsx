@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ArrowRight, Cpu, Zap, Shield, Search, Wrench, Star, X } from "lucide-react";
 import Icon from "@/components/ui/icon";
 
@@ -79,6 +80,7 @@ const BUILDS: Build[] = [
 ];
 
 const Index = () => {
+  const navigate = useNavigate();
   const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({});
   const [selectedBuild, setSelectedBuild] = useState<Build | null>(null);
   const [form, setForm] = useState({ name: "", phone: "" });
@@ -137,7 +139,7 @@ const Index = () => {
             <button className="px-5 py-2.5 text-sm font-medium border border-accent/40 rounded-full hover:border-accent/70 hover:bg-accent/10 transition-all">
               Войти
             </button>
-            <button className="px-5 py-2.5 text-sm font-medium bg-gradient-to-r from-accent via-accent to-accent/80 text-black rounded-full hover:shadow-lg hover:shadow-accent/40 transition-all font-semibold">
+            <button onClick={() => navigate("/configurator")} className="px-5 py-2.5 text-sm font-medium bg-gradient-to-r from-accent via-accent to-accent/80 text-black rounded-full hover:shadow-lg hover:shadow-accent/40 transition-all font-semibold">
               Собрать ПК
             </button>
           </div>
@@ -165,7 +167,7 @@ const Index = () => {
                 AI-агент подберёт совместимые комплектующие под ваш бюджет и задачи — гейминг, работа, монтаж видео. Пошагово, без лишних слов.
               </p>
               <div className="flex gap-4 mb-12 flex-col sm:flex-row">
-                <button className="group px-8 py-4 bg-gradient-to-r from-accent to-accent/90 text-black rounded-full hover:shadow-2xl hover:shadow-accent/50 transition-all font-semibold text-lg flex items-center gap-3 justify-center">
+                <button onClick={() => navigate("/configurator")} className="group px-8 py-4 bg-gradient-to-r from-accent to-accent/90 text-black rounded-full hover:shadow-2xl hover:shadow-accent/50 transition-all font-semibold text-lg flex items-center gap-3 justify-center">
                   Начать сборку
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition" />
                 </button>
@@ -403,7 +405,7 @@ const Index = () => {
           <p className="text-xl text-muted-foreground mb-12 font-light max-w-2xl mx-auto">
             Расскажи агенту о своих задачах и бюджете — он подберёт идеальную конфигурацию за минуты.
           </p>
-          <button className="group px-10 py-5 bg-gradient-to-r from-accent to-accent/90 text-black rounded-full hover:shadow-2xl hover:shadow-accent/40 transition-all font-bold text-lg flex items-center gap-3 mx-auto">
+          <button onClick={() => navigate("/configurator")} className="group px-10 py-5 bg-gradient-to-r from-accent to-accent/90 text-black rounded-full hover:shadow-2xl hover:shadow-accent/40 transition-all font-bold text-lg flex items-center gap-3 mx-auto">
             Начать бесплатно
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition" />
           </button>
