@@ -49,6 +49,9 @@ const Index = () => {
             <a href="#how" className="text-muted-foreground hover:text-white transition-colors">
               Как это работает
             </a>
+            <a href="#builds" className="text-muted-foreground hover:text-white transition-colors">
+              Топ сборок
+            </a>
             <a href="#pricing" className="text-muted-foreground hover:text-white transition-colors">
               Тарифы
             </a>
@@ -241,6 +244,131 @@ const Index = () => {
                   {i < 3 && (
                     <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-0.5 bg-gradient-to-r from-accent/40 to-transparent" />
                   )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Top Builds */}
+      <section id="builds" className="py-32 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div
+            className={`text-center mb-20 transition-all duration-1000 ${visibleSections["how"] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+          >
+            <span className="text-xs font-medium tracking-widest text-accent/60 uppercase">Готовые конфигурации</span>
+            <h2 className="text-5xl lg:text-6xl font-display font-black tracking-tighter mt-4 mb-4">
+              <span className="bg-gradient-to-r from-white via-white to-accent/40 bg-clip-text text-transparent">
+                Топ сборок 2026
+              </span>
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto">Проверенные конфигурации под разные задачи и бюджеты</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                tag: "Гейминг",
+                name: "Игровой Хит",
+                price: "85 000 ₽",
+                cpu: "AMD Ryzen 7 7700X",
+                gpu: "RTX 4070 Super",
+                ram: "32 ГБ DDR5",
+                ssd: "1 ТБ NVMe",
+                badge: "Топ продаж",
+                highlight: true,
+              },
+              {
+                tag: "Бюджетный",
+                name: "Старт",
+                price: "35 000 ₽",
+                cpu: "AMD Ryzen 5 7600",
+                gpu: "RTX 4060",
+                ram: "16 ГБ DDR5",
+                ssd: "512 ГБ NVMe",
+                badge: null,
+                highlight: false,
+              },
+              {
+                tag: "Работа и учёба",
+                name: "Офисный Про",
+                price: "45 000 ₽",
+                cpu: "Intel Core i5-14400",
+                gpu: "Intel Arc A380",
+                ram: "32 ГБ DDR4",
+                ssd: "1 ТБ NVMe",
+                badge: null,
+                highlight: false,
+              },
+              {
+                tag: "Видеомонтаж",
+                name: "Медиа Студия",
+                price: "130 000 ₽",
+                cpu: "AMD Ryzen 9 7950X",
+                gpu: "RTX 4080",
+                ram: "64 ГБ DDR5",
+                ssd: "2 ТБ NVMe",
+                badge: "Выбор профи",
+                highlight: false,
+              },
+              {
+                tag: "Гейминг 4K",
+                name: "Ультра Монстр",
+                price: "200 000 ₽",
+                cpu: "Intel Core i9-14900K",
+                gpu: "RTX 4090",
+                ram: "64 ГБ DDR5",
+                ssd: "4 ТБ NVMe",
+                badge: "Максимум",
+                highlight: false,
+              },
+            ].map((build, i) => {
+              const isVisible = visibleSections["how"];
+              return (
+                <div
+                  key={i}
+                  className={`group relative border rounded-2xl p-7 transition-all duration-700 cursor-pointer ${
+                    build.highlight
+                      ? "border-accent/50 bg-accent/10 hover:bg-accent/15"
+                      : "border-accent/10 bg-card/50 hover:bg-card/80 hover:border-accent/30"
+                  } ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+                  style={{ transitionDelay: `${i * 100}ms` }}
+                >
+                  {build.badge && (
+                    <div className="absolute -top-3 left-6 px-3 py-1 bg-accent text-black text-xs font-bold rounded-full">
+                      {build.badge}
+                    </div>
+                  )}
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <span className="text-xs font-medium text-accent/70 uppercase tracking-widest">{build.tag}</span>
+                      <h3 className="font-display font-black text-2xl mt-1">{build.name}</h3>
+                    </div>
+                    <div className="text-2xl font-black text-accent">{build.price}</div>
+                  </div>
+                  <ul className="space-y-2 mb-6">
+                    {[
+                      { label: "CPU", value: build.cpu },
+                      { label: "GPU", value: build.gpu },
+                      { label: "RAM", value: build.ram },
+                      { label: "SSD", value: build.ssd },
+                    ].map((spec) => (
+                      <li key={spec.label} className="flex justify-between text-sm">
+                        <span className="text-muted-foreground">{spec.label}</span>
+                        <span className="text-foreground/90 font-medium">{spec.value}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <button
+                    className={`w-full py-3 rounded-xl text-sm font-semibold transition-all ${
+                      build.highlight
+                        ? "bg-gradient-to-r from-accent to-accent/80 text-black hover:shadow-lg hover:shadow-accent/30"
+                        : "border border-accent/20 hover:border-accent/50 hover:bg-accent/10"
+                    }`}
+                  >
+                    Выбрать сборку
+                  </button>
                 </div>
               );
             })}
