@@ -79,12 +79,15 @@ const BUILDS: Build[] = [
   },
 ];
 
+const SEND_ORDER_URL = "https://functions.poehali.dev/de0978e8-64f6-4321-8255-44f0d1f9d549";
+
 const Index = () => {
   const navigate = useNavigate();
   const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({});
   const [selectedBuild, setSelectedBuild] = useState<Build | null>(null);
   const [form, setForm] = useState({ name: "", phone: "" });
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     const observers: Record<string, IntersectionObserver> = {};
@@ -108,8 +111,27 @@ const Index = () => {
     };
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedBuild) return;
+    setSending(true);
+    await fetch(SEND_ORDER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: form.name,
+        phone: form.phone,
+        build_name: selectedBuild.name,
+        total_price: selectedBuild.price,
+        components: [
+          { label: "CPU", name: selectedBuild.cpu, price: "" },
+          { label: "GPU", name: selectedBuild.gpu, price: "" },
+          { label: "RAM", name: selectedBuild.ram, price: "" },
+          { label: "SSD", name: selectedBuild.ssd, price: "" },
+        ],
+      }),
+    });
+    setSending(false);
     setSent(true);
   };
 
@@ -480,9 +502,10 @@ const Index = () => {
                   />
                   <button
                     type="submit"
-                    className="w-full py-3 bg-gradient-to-r from-accent to-accent/80 text-black rounded-xl font-semibold hover:shadow-lg hover:shadow-accent/30 transition-all"
+                    disabled={sending}
+                    className="w-full py-3 bg-gradient-to-r from-accent to-accent/80 text-black rounded-xl font-semibold hover:shadow-lg hover:shadow-accent/30 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
                   >
-                    Отправить заявку
+                    {sending ? "Отправляем..." : "Отправить заявку"}
                   </button>
                 </form>
               </>
