@@ -134,12 +134,15 @@ const CATEGORIES: Category[] = [
 
 type Selection = Record<string, Component>;
 
+const SEND_ORDER_URL = "https://functions.poehali.dev/de0978e8-64f6-4321-8255-44f0d1f9d549";
+
 const Configurator = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [selection, setSelection] = useState<Selection>({});
   const [showSummary, setShowSummary] = useState(false);
   const [orderSent, setOrderSent] = useState(false);
+  const [sending, setSending] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "" });
 
   const category = CATEGORIES[step];
@@ -157,8 +160,27 @@ const Configurator = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSending(true);
+    const components = CATEGORIES
+      .filter((cat) => selection[cat.id])
+      .map((cat) => ({
+        label: cat.label,
+        name: `${selection[cat.id].brand} ${selection[cat.id].name}`,
+        price: `${selection[cat.id].price.toLocaleString("ru")} ₽`,
+      }));
+    await fetch(SEND_ORDER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: form.name,
+        phone: form.phone,
+        total_price: `${totalPrice.toLocaleString("ru")} ₽`,
+        components,
+      }),
+    });
+    setSending(false);
     setOrderSent(true);
   };
 
@@ -214,8 +236,8 @@ const Configurator = () => {
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl bg-white/5 border border-accent/20 text-white placeholder:text-muted-foreground focus:outline-none focus:border-accent/50 transition-colors text-sm"
                 />
-                <button type="submit" className="w-full py-4 bg-gradient-to-r from-accent to-accent/80 text-black rounded-xl font-bold hover:shadow-lg hover:shadow-accent/30 transition-all">
-                  Отправить заявку на сборку
+                <button type="submit" disabled={sending} className="w-full py-4 bg-gradient-to-r from-accent to-accent/80 text-black rounded-xl font-bold hover:shadow-lg hover:shadow-accent/30 transition-all disabled:opacity-70 disabled:cursor-not-allowed">
+                  {sending ? "Отправляем..." : "Отправить заявку на сборку"}
                 </button>
               </form>
             </>
