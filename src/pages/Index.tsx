@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Zap, Lock, TrendingUp, Cpu, Settings, Cloud, ArrowRight } from "lucide-react";
+import { ArrowRight, Cpu, Zap, Shield, Search, Wrench, Star } from "lucide-react";
+import Icon from "@/components/ui/icon";
 
 const Index = () => {
   const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({});
@@ -38,7 +39,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
           <div className="flex items-center">
             <div className="font-display font-bold text-2xl tracking-tighter bg-gradient-to-r from-white via-accent to-accent/80 bg-clip-text text-transparent">
-              AgentForge
+              BuildMind
             </div>
           </div>
           <nav className="hidden md:flex gap-10 text-sm font-medium">
@@ -57,7 +58,7 @@ const Index = () => {
               Войти
             </button>
             <button className="px-5 py-2.5 text-sm font-medium bg-gradient-to-r from-accent via-accent to-accent/80 text-black rounded-full hover:shadow-lg hover:shadow-accent/40 transition-all font-semibold">
-              Попробовать
+              Собрать ПК
             </button>
           </div>
         </div>
@@ -66,11 +67,10 @@ const Index = () => {
       {/* Hero Section */}
       <section id="hero" className="relative pt-32 pb-32 px-6 min-h-screen flex items-center overflow-hidden">
         <div className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden">
-          <img src="/images/black-hole-gif.gif" alt="Black hole animation" className="w-auto h-3/4 object-contain" />
+          <img src="/images/black-hole-gif.gif" alt="Background animation" className="w-auto h-3/4 object-contain" />
         </div>
         <div className="absolute inset-0 bg-black/70" />
 
-        {/* Content overlay */}
         <div className="relative z-10 max-w-7xl mx-auto w-full">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div
@@ -78,23 +78,23 @@ const Index = () => {
             >
               <div className="mb-8 inline-block">
                 <span className="text-xs font-medium tracking-widest text-accent/80 uppercase">
-                  AI-инфраструктура нового поколения
+                  AI-агент для сборки компьютеров
                 </span>
               </div>
               <h1 className="text-6xl lg:text-7xl font-display font-black leading-tight mb-8 tracking-tighter">
                 <span className="bg-gradient-to-br from-white via-white to-accent/40 bg-clip-text text-transparent">
-                  Создавай. Запускай.
+                  Собери ПК.
                 </span>
                 <br />
-                <span className="text-accent">Автоматизируй.</span>
+                <span className="text-accent">Без ошибок.</span>
               </h1>
               <p className="text-xl text-white/80 leading-relaxed mb-10 max-w-xl font-light">
-                AgentForge позволяет создавать, разворачивать и масштабировать умных AI-агентов.
-                От идеи до продакшена за минуты, а не месяцы.
+                AI-агент подберёт совместимые комплектующие под ваш бюджет и задачи — гейминг, работа, монтаж видео.
+                Пошагово, без лишних слов.
               </p>
               <div className="flex gap-4 mb-12 flex-col sm:flex-row">
                 <button className="group px-8 py-4 bg-gradient-to-r from-accent to-accent/90 text-black rounded-full hover:shadow-2xl hover:shadow-accent/50 transition-all font-semibold text-lg flex items-center gap-3 justify-center">
-                  Запустить сейчас
+                  Начать сборку
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition" />
                 </button>
                 <button className="px-8 py-4 border border-accent/40 rounded-full hover:border-accent/70 hover:bg-accent/10 transition-all font-medium text-lg text-white">
@@ -103,16 +103,16 @@ const Index = () => {
               </div>
               <div className="grid grid-cols-3 gap-8 pt-8 border-t border-white/10">
                 <div>
-                  <div className="text-2xl font-bold text-accent mb-2">10 000+</div>
-                  <p className="text-sm text-white/60">Активных агентов</p>
+                  <div className="text-2xl font-bold text-accent mb-2">5 000+</div>
+                  <p className="text-sm text-white/60">Сборок завершено</p>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-white mb-2">500 000+</div>
-                  <p className="text-sm text-white/60">Выполненных задач</p>
+                  <div className="text-2xl font-bold text-white mb-2">100%</div>
+                  <p className="text-sm text-white/60">Совместимость деталей</p>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-accent mb-2">99.99%</div>
-                  <p className="text-sm text-white/60">Аптайм</p>
+                  <div className="text-2xl font-bold text-accent mb-2">до 30%</div>
+                  <p className="text-sm text-white/60">Экономия бюджета</p>
                 </div>
               </div>
             </div>
@@ -123,7 +123,7 @@ const Index = () => {
               <div className="absolute inset-0 bg-gradient-to-br from-accent/30 via-transparent to-transparent rounded-3xl blur-3xl animate-pulse" />
               <img
                 src="/omnius-logo.png"
-                alt="Omnius Agent"
+                alt="BuildMind AI"
                 className="w-full max-w-sm lg:max-w-md drop-shadow-2xl animate-float relative z-10"
               />
             </div>
@@ -140,7 +140,7 @@ const Index = () => {
             <span className="text-xs font-medium tracking-widest text-accent/60 uppercase">Возможности</span>
             <h2 className="text-5xl lg:text-6xl font-display font-black tracking-tighter mt-4 mb-6">
               <span className="bg-gradient-to-r from-white via-white to-accent/40 bg-clip-text text-transparent">
-                Суперсилы встроены
+                Умный помощник внутри
               </span>
             </h2>
           </div>
@@ -148,47 +148,48 @@ const Index = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                icon: Zap,
-                title: "Молниеносный деплой",
-                desc: "Развертывание в продакшен одним кликом без настройки",
+                icon: "Cpu",
+                title: "Подбор под задачу",
+                desc: "Скажите что хотите делать — гейминг, работа, стриминг — и агент сам подберёт нужные компоненты",
               },
               {
-                icon: Cpu,
-                title: "Умный AI-движок",
-                desc: "Продвинутые возможности рассуждения, которые учатся и адаптируются",
+                icon: "Shield",
+                title: "Проверка совместимости",
+                desc: "Автоматически проверяет, что все детали совместимы между собой. Никаких ошибок при сборке",
               },
               {
-                icon: TrendingUp,
-                title: "Автомасштабирование",
-                desc: "Автоматическое масштабирование ресурсов на основе нагрузки",
+                icon: "Zap",
+                title: "Оптимизация бюджета",
+                desc: "Агент предлагает лучшее соотношение цена/производительность в рамках вашего бюджета",
               },
               {
-                icon: Lock,
-                title: "Корпоративная безопасность",
-                desc: "Банковское шифрование и соответствие SOC2, GDPR, HIPAA",
+                icon: "Search",
+                title: "Сравнение цен",
+                desc: "Сравнивает актуальные цены у ключевых поставщиков и находит выгодные предложения",
               },
               {
-                icon: Settings,
-                title: "Гибкие сценарии",
-                desc: "Создавайте сложные цепочки автоматизации в визуальном редакторе",
+                icon: "Wrench",
+                title: "Пошаговая инструкция",
+                desc: "После подбора деталей агент даёт понятную инструкцию по сборке с фото и видео",
               },
               {
-                icon: Cloud,
-                title: "Мультиоблачность",
-                desc: "Разворачивайте где угодно - AWS, Azure, GCP или своя инфраструктура",
+                icon: "Star",
+                title: "Готовые сборки",
+                desc: "Библиотека проверенных конфигураций для популярных задач — выбери и настрой под себя",
               },
             ].map((item, i) => {
-              const Icon = item.icon;
               const isVisible = visibleSections["features"];
               return (
                 <div
                   key={i}
-                  className={`group p-8 border border-accent/10 hover:border-accent/40 rounded-2xl bg-card/50 hover:bg-card/80 transition-all duration-500 cursor-pointer backdrop-blur-sm ${
+                  className={`group p-8 border border-accent/10 hover:border-accent/40 rounded-2xl bg-card/50 hover:bg-card/80 transition-all duration-700 ${
                     isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                   }`}
                   style={{ transitionDelay: `${i * 100}ms` }}
                 >
-                  <Icon className="w-10 h-10 mb-6 text-accent group-hover:scale-110 transition-transform" />
+                  <div className="w-12 h-12 bg-accent/10 group-hover:bg-accent/20 rounded-xl flex items-center justify-center mb-6 transition-colors">
+                    <Icon name={item.icon} size={22} className="text-accent" />
+                  </div>
                   <h3 className="font-display font-bold text-xl mb-3">{item.title}</h3>
                   <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
                 </div>
@@ -207,17 +208,17 @@ const Index = () => {
             <span className="text-xs font-medium tracking-widest text-accent/60 uppercase">Процесс</span>
             <h2 className="text-5xl lg:text-6xl font-display font-black tracking-tighter mt-4">
               <span className="bg-gradient-to-r from-white via-white to-accent/40 bg-clip-text text-transparent">
-                От нуля до героя
+                Четыре шага до сборки
               </span>
             </h2>
           </div>
 
           <div className="grid md:grid-cols-4 gap-6">
             {[
-              { num: "01", title: "Проектируй", desc: "Определите возможности агента в интуитивном конструкторе" },
-              { num: "02", title: "Обучай", desc: "Загрузите данные и примеры для настройки поведения" },
-              { num: "03", title: "Запускай", desc: "Запуск в продакшен одним кликом" },
-              { num: "04", title: "Масштабируй", desc: "Автомасштабирование обрабатывает миллионы запросов" },
+              { num: "01", title: "Расскажите о себе", desc: "Укажите для чего нужен ПК и какой у вас бюджет" },
+              { num: "02", title: "Агент подбирает", desc: "AI анализирует тысячи конфигураций и выбирает лучшую под вас" },
+              { num: "03", title: "Проверяем детали", desc: "Убеждаемся в совместимости и находим лучшие цены у поставщиков" },
+              { num: "04", title: "Собираете ПК", desc: "Получаете список деталей и пошаговую инструкцию по сборке" },
             ].map((step, i) => {
               const isVisible = visibleSections["how"];
               return (
@@ -264,15 +265,25 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-8">
             {[
               {
-                name: "Стартовый",
-                price: "4 900 \u20bd/\u043c\u0435\u0441",
-                features: ["До 10 агентов", "100 000 запросов/месяц", "Поддержка сообщества", "Базовая аналитика"],
+                name: "Базовый",
+                price: "Бесплатно",
+                features: [
+                  "3 сборки в месяц",
+                  "Проверка совместимости",
+                  "Готовые шаблоны конфигураций",
+                  "Пошаговая инструкция",
+                ],
                 highlight: false,
               },
               {
-                name: "Корпоративный",
-                price: "По запросу",
-                features: ["Безлимитные агенты", "Безлимитные запросы", "Поддержка 24/7", "Индивидуальные интеграции"],
+                name: "Про",
+                price: "990 ₽/мес",
+                features: [
+                  "Неограниченные сборки",
+                  "Сравнение цен у поставщиков",
+                  "Персональные рекомендации",
+                  "Приоритетная поддержка 24/7",
+                ],
                 highlight: true,
               },
             ].map((plan, i) => {
@@ -312,7 +323,7 @@ const Index = () => {
                           : "border border-accent/20 hover:border-accent/40 hover:bg-accent/5"
                       }`}
                     >
-                      {plan.highlight ? "Связаться с нами" : "Попробовать бесплатно"}
+                      {plan.highlight ? "Подключить Про" : "Начать бесплатно"}
                     </button>
                   </div>
                 </div>
@@ -329,11 +340,11 @@ const Index = () => {
         >
           <h2 className="text-5xl lg:text-6xl font-display font-black tracking-tighter mb-6">
             <span className="bg-gradient-to-r from-white via-white to-accent/40 bg-clip-text text-transparent">
-              Готовы создавать?
+              Готов собрать свой ПК?
             </span>
           </h2>
           <p className="text-xl text-muted-foreground mb-12 font-light max-w-2xl mx-auto">
-            Присоединяйтесь к тысячам разработчиков, которые строят будущее с AgentForge.
+            Расскажи агенту о своих задачах и бюджете — он подберёт идеальную конфигурацию за минуты.
           </p>
           <button className="group px-10 py-5 bg-gradient-to-r from-accent to-accent/90 text-black rounded-full hover:shadow-2xl hover:shadow-accent/40 transition-all font-bold text-lg flex items-center gap-3 mx-auto">
             Начать бесплатно
@@ -345,7 +356,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="border-t border-accent/10 py-12 px-6 bg-background/50">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-muted-foreground">
-          <p>© 2025 AgentForge — Создавайте умных агентов</p>
+          <p>© 2026 BuildMind — AI-агент для сборки ПК</p>
           <div className="flex gap-8">
             <a href="#" className="hover:text-white transition-colors">
               Конфиденциальность
@@ -354,7 +365,7 @@ const Index = () => {
               Условия
             </a>
             <a href="#" className="hover:text-white transition-colors">
-              Документация
+              FAQ
             </a>
             <a href="#" className="hover:text-white transition-colors">
               Контакты
